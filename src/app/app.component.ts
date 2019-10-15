@@ -12,6 +12,9 @@ function getRandomNumber() {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  editing = false;
+  editingId: number;
+
   flashs: Flash[] = [
     {
       question: 'Question 1',
@@ -41,5 +44,21 @@ export class AppComponent {
     const toggledFlash = this.flashs.find(flash => flash.id === id);
 
     toggledFlash.show = !toggledFlash.show;
+  }
+
+  handleDelete(id: number) {
+    const flashId = this.flashs.indexOf(this.flashs.find(flash => flash.id === id));
+    this.flashs.splice(flashId, 1);
+  }
+
+  handleEdit(id: number) {
+    this.editing = true;
+    this.editingId = id;
+    // TODO: Add editing logic
+  }
+
+  handleRememberChange({ id, flag }) {
+    const selectedFlash = this.flashs.find(flash => flash.id === id);
+    selectedFlash.remembered = flag;
   }
 }

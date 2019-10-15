@@ -10,6 +10,9 @@ export class FlashComponent implements OnInit {
   @Input() flash: Flash;
 
   @Output() toggleCardEvent = new EventEmitter();
+  @Output() deleteFlashEvent = new EventEmitter();
+  @Output() editFlashEvent = new EventEmitter();
+  @Output() rememberChangeEvent = new EventEmitter();
 
   constructor() { }
 
@@ -18,6 +21,28 @@ export class FlashComponent implements OnInit {
 
   toggleCard() {
     this.toggleCardEvent.emit(this.flash.id);
+  }
+
+  deleteFlash() {
+    this.deleteFlashEvent.emit(this.flash.id);
+  }
+
+  editFlash() {
+    this.editFlashEvent.emit(this.flash.id);
+  }
+
+  markCorrect() {
+    this.rememberChangeEvent.emit({
+      id: this.flash.id,
+      flag: 'correct'
+    });
+  }
+
+  markIncorrect() {
+    this.rememberChangeEvent.emit({
+      id: this.flash.id,
+      flag: 'incorrect'
+    });
   }
 
 }
