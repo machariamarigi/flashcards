@@ -1,5 +1,5 @@
 <div class="card">
-  <header class="card-header">
+  <header class="card-header" (click)="toggleCard()">
     <p class="card-header-title">{{ flash.question }}</p>
     <a 
       href="javascript:void(0)"
@@ -11,7 +11,7 @@
         </span>
     </a>
   </header>
-  <div class="card-content">
+  <div class="card-content" *ngIf="flash.show">
     <div class="content">{{ flash.answer }}</div>
   </div>
   <footer class="card-footer">

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Flash } from '../flash.model';
 
 @Component({
@@ -9,9 +9,15 @@ import { Flash } from '../flash.model';
 export class FlashComponent implements OnInit {
   @Input() flash: Flash;
 
+  @Output() toggleCardEvent = new EventEmitter();
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  toggleCard() {
+    this.toggleCardEvent.emit(this.flash.id);
   }
 
 }
