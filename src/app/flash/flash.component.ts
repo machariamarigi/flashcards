@@ -7,12 +7,7 @@ import { Flash } from '../flash.model';
   styleUrls: ['./flash.component.scss']
 })
 export class FlashComponent implements OnInit {
-  @Input() flash: Flash = {
-    id: 1,
-    question: 'React to Angular',
-    answer: 'No reaction ;)',
-    show: false
-  };
+  @Input() flash: Flash;
 
   constructor() { }
 
