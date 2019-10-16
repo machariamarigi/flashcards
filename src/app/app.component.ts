@@ -60,7 +60,9 @@ export class AppComponent {
   handleEdit(id: number) {
     this.editing = true;
     this.editingId = id;
-    // TODO: Add editing logic
+    const flashSelected = this.flashs.find(flash => flash.id === id);
+    this.flash.question = flashSelected.question;
+    this.flash.answer = flashSelected.answer;
   }
 
   handleRememberChange({ id, flag }) {
@@ -83,5 +85,18 @@ export class AppComponent {
       answer: ''
     };
     this.flashForm.reset();
+  }
+
+  handleUpdate() {
+    const selectedFlash = this.flashs.find(flash => flash.id === this.editingId);
+    selectedFlash.question = this.flash.question;
+    selectedFlash.answer = this.flash.answer;
+    this.handleCancel();
+  }
+
+  handleCancel() {
+    this.editing = false;
+    this.editingId = undefined;
+    this.handleClear();
   }
 }
