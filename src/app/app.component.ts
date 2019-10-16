@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 import { Flash } from './flash.model';
 
@@ -12,8 +13,13 @@ function getRandomNumber() {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  @ViewChild('flashForm', {static: true}) flashForm: NgForm
   editing = false;
   editingId: number;
+  flash = {
+    question: '',
+    answer: ''
+  };
 
   flashs: Flash[] = [
     {
@@ -60,5 +66,22 @@ export class AppComponent {
   handleRememberChange({ id, flag }) {
     const selectedFlash = this.flashs.find(flash => flash.id === id);
     selectedFlash.remembered = flag;
+  }
+
+  handleSubmit(): void {
+    this.flashs.push({
+      id: getRandomNumber(),
+      ...this.flash,
+      show: false
+    });
+    this.handleClear();
+  }
+
+  handleClear() {
+    this.flash = {
+      question: '',
+      answer: ''
+    };
+    this.flashForm.reset();
   }
 }
