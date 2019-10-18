@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { Flash } from './flash.model';
+import { FlashService } from './flash.service';
 
 function getRandomNumber() {
   return Math.floor(Math.random() * 10000);
@@ -13,7 +14,7 @@ function getRandomNumber() {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  @ViewChild('flashForm', {static: true}) flashForm: NgForm
+  @ViewChild('flashForm', {static: true}) flashForm: NgForm;
   editing = false;
   editingId: number;
   flash = {
@@ -21,61 +22,36 @@ export class AppComponent {
     answer: ''
   };
 
-  flashs: Flash[] = [
-    {
-      question: 'Question 1',
-      answer: 'Answer 1',
-      show: false,
-      id: getRandomNumber(),
-    },
-    {
-      question: 'Question 2',
-      answer: 'Answer 2',
-      show: false,
-      id: getRandomNumber(),
-    },
-    {
-      question: 'Question 3',
-      answer: 'Answer 3',
-      show: false,
-      id: getRandomNumber(),
-    }
-  ];
+  flashs: Flash[];
+
+  constructor(private flashService: FlashService) {
+    this.flashs = this.flashService.flashs;
+  }
 
   trackByFlashId(index, flash) {
     return flash.id;
   }
 
   handleToggleCard(id: number) {
-    const toggledFlash = this.flashs.find(flash => flash.id === id);
-
-    toggledFlash.show = !toggledFlash.show;
+    this.flashService.toggleFlash(id);
   }
 
   handleDelete(id: number) {
-    const flashId = this.flashs.indexOf(this.flashs.find(flash => flash.id === id));
-    this.flashs.splice(flashId, 1);
+    this.flashService.deleteFlash(id);
   }
 
   handleEdit(id: number) {
+    this.flashService.getFlash(id);
     this.editing = true;
     this.editingId = id;
-    const flashSelected = this.flashs.find(flash => flash.id === id);
-    this.flash.question = flashSelected.question;
-    this.flash.answer = flashSelected.answer;
   }
 
   handleRememberChange({ id, flag }) {
-    const selectedFlash = this.flashs.find(flash => flash.id === id);
-    selectedFlash.remembered = flag;
+    this.flashService.rememberedChange(id, flag);
   }
 
   handleSubmit(): void {
-    this.flashs.push({
-      id: getRandomNumber(),
-      ...this.flash,
-      show: false
-    });
+    this.flashService.addFlash(this.flash);
     this.handleClear();
   }
 
@@ -88,9 +64,7 @@ export class AppComponent {
   }
 
   handleUpdate() {
-    const selectedFlash = this.flashs.find(flash => flash.id === this.editingId);
-    selectedFlash.question = this.flash.question;
-    selectedFlash.answer = this.flash.answer;
+    this.flashService.updateFlash(this.editingId, this.flash);
     this.handleCancel();
   }
 
