@@ -1,20 +1,18 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 import { Flash } from './flash.model';
 import { FlashService } from './flash.service';
-
-function getRandomNumber() {
-  return Math.floor(Math.random() * 10000);
-}
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   @ViewChild('flashForm', {static: true}) flashForm: NgForm;
+  flashs$: Observable<Flash[]>;
   editing = false;
   editingId: number;
   flash = {
@@ -22,10 +20,11 @@ export class AppComponent {
     answer: ''
   };
 
-  flashs: Flash[];
 
-  constructor(private flashService: FlashService) {
-    this.flashs = this.flashService.flashs;
+  constructor(private flashService: FlashService) {}
+
+  ngOnInit(): void {
+    this.flashs$ = this.flashService.flashs$;
   }
 
   trackByFlashId(index, flash) {
